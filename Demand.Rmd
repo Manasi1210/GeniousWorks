@@ -1,0 +1,75 @@
+---
+title: "Ontario Power Demand - Heat Map"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r plot, echo=FALSE, fig.height=8, fig.width=12, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(tidyverse)
+library(lubridate)
+library(ggplot2)
+library(scales)
+library(ggpubr)
+D2016 <- read_csv("PUB_Demand_2016.csv")
+D2017 <- read_csv("PUB_Demand_2017.csv")
+D2018 <- read_csv("PUB_Demand_2018.csv")
+D2019 <- read_csv("PUB_Demand_2019.csv")
+D2016 <- D2016 %>%
+  select(Date, Hour, `Ontario Demand`)%>%
+  mutate(Hour= as_factor(Hour), Date=dmy(Date), DemandMW=`Ontario Demand` )
+  
+D2017 <- D2017 %>%
+  select(Date, Hour, `Ontario Demand`)%>%
+  mutate(Hour= as_factor(Hour), Date=dmy(Date),DemandMW=`Ontario Demand`)
+D2018 <- D2018 %>%
+  select(Date, Hour, `Ontario Demand`)%>%
+  mutate(Hour= as_factor(Hour), Date=dmy(Date),DemandMW=`Ontario Demand`)
+D2019 <- D2019 %>%
+  select(Date, Hour, `Ontario Demand`)%>%
+  mutate(Hour= as_factor(Hour), Date=dmy(Date),DemandMW=`Ontario Demand`)
+
+
+p2016 <-D2016 %>%
+  ggplot(aes(x=Date,y=Hour,colour=DemandMW))+
+  geom_point(stat='identity', position='identity')+
+  scale_colour_gradient(low='green',high='red')+
+  labs(x= NULL, y= NULL, title= '2016')+
+  scale_x_date(date_labels = "%b")+
+  theme(legend.position = "bottom",
+        legend.text = element_text( size=12,angle=45),legend.key.size=unit(.7, "cm"))
+
+p2017 <-D2017 %>%
+  ggplot(aes(x=Date,y=Hour,colour=DemandMW))+
+  geom_point(stat='identity', position='identity')+
+  scale_colour_gradient(low='green',high='red')+
+  labs(x= NULL, y= NULL, title= '2017')+
+  scale_x_date(date_labels = "%b")+
+  theme(legend.position = "bottom",
+        legend.text = element_text( size=12,angle=45),legend.key.size=unit(.7, "cm"))
+
+p2018 <-D2018 %>%
+  ggplot(aes(x=Date,y=Hour,colour=DemandMW))+
+  geom_point(stat='identity', position='identity')+
+  scale_colour_gradient(low='green',high='red')+
+  labs(x= NULL, y= NULL, title= '2018')+
+  scale_x_date(date_labels = "%b")+
+  theme(legend.position = "bottom",
+        legend.text = element_text( size=12,angle=45),legend.key.size=unit(.7, "cm"))
+
+p2019 <-D2019 %>%
+  ggplot(aes(x=Date,y=Hour,colour=DemandMW))+
+  geom_point(stat='identity', position='identity')+
+  scale_colour_gradient(low='green',high='red')+
+  labs(x= NULL, y= NULL, title= '2019')+
+  scale_x_date(date_labels = "%b")+
+  theme(legend.position = "bottom",
+        legend.text = element_text( size=12,angle=45),legend.key.size=unit(.7, "cm"))
+
+ggarrange(p2016,p2017,p2018,p2019,
+            ncol=2,nrow=2, common.legend = TRUE, legend="bottom")
+
+```
+Data Source: IESO
+
+
